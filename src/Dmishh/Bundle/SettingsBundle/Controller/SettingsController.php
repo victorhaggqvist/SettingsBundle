@@ -25,9 +25,8 @@ class SettingsController extends Controller
     public function manageGlobalAction(Request $request)
     {
         $securitySettings = $this->container->getParameter('settings_manager.security');
-        if (!empty($securitySettings['manage_global_settings_role']) && !$this->get('security.context')->isGranted(
-                $securitySettings['manage_global_settings_role']
-            )
+        if (!empty($securitySettings['manage_global_settings_role']) &&
+            !$this->getAuthorizationChecker()->isGranted($securitySettings['manage_global_settings_role'])
         ) {
             throw new AccessDeniedException($this->container->get('translator')->trans(
                 'not_allowed_to_edit_global_settings',
