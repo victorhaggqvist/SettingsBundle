@@ -25,7 +25,7 @@ class SettingsController extends Controller
      */
     public function manageGlobalAction(Request $request)
     {
-        $securitySettings = $this->container->getParameter('settings_manager.security');
+        $securitySettings = $this->getParameter('settings_manager.security');
         if (!empty($securitySettings['manage_global_settings_role']) &&
             !$this->getAuthorizationChecker()->isGranted($securitySettings['manage_global_settings_role'])
         ) {
@@ -55,7 +55,7 @@ class SettingsController extends Controller
             ));
         }
 
-        $securitySettings = $this->container->getParameter('settings_manager.security');
+        $securitySettings = $this->getParameter('settings_manager.security');
         if (!$securitySettings['users_can_manage_own_settings']) {
             throw new AccessDeniedException($this->get('translator')->trans(
                 'not_allowed_to_edit_own_settings',
@@ -100,10 +100,10 @@ class SettingsController extends Controller
         }
 
         return $this->render(
-            $this->container->getParameter('settings_manager.template'),
+            $this->getParameter('settings_manager.template'),
             array(
                 'settings_form' => $form->createView(),
-                'layout' => $this->container->getParameter('settings_manager.layout'),
+                'layout' => $this->getParameter('settings_manager.layout'),
             )
         );
     }
