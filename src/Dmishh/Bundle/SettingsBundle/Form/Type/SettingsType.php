@@ -14,7 +14,7 @@ namespace Dmishh\Bundle\SettingsBundle\Form\Type;
 use Dmishh\Bundle\SettingsBundle\Exception\SettingsException;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Settings management form
@@ -77,7 +77,7 @@ class SettingsType extends AbstractType
     /**
      * {@inheritDoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             array(
@@ -85,11 +85,7 @@ class SettingsType extends AbstractType
             )
         );
 
-        $resolver->addAllowedTypes(
-            array(
-                'disabled_settings' => 'array'
-            )
-        );
+        $resolver->addAllowedTypes('disabled_settings', 'array');
     }
 
     /**
