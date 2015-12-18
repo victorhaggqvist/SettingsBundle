@@ -12,6 +12,7 @@
 namespace Dmishh\Bundle\SettingsBundle\Form\Type;
 
 use Dmishh\Bundle\SettingsBundle\Exception\SettingsException;
+use Dmishh\Bundle\SettingsBundle\Exception\UnknownTypeException;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -39,7 +40,7 @@ class SettingsType extends AbstractType
         foreach ($this->settingsConfiguration as $name => $configuration) {
             // If setting's value exists in data and setting isn't disabled
             if (array_key_exists($name, $options['data']) && !in_array($name, $options['disabled_settings'])) {
-                $fieldType = $configuration['validation']['type'];
+                $fieldType = $this->mapType($configuration['validation']['type']);
                 $fieldOptions = $configuration['validation']['options'];
 
                 // Validator constraints
@@ -95,4 +96,55 @@ class SettingsType extends AbstractType
     {
         return 'settings_management';
     }
+
+    /**
+     * Map string type to fully qualified class name
+     *
+     * Switch generated with typemapping.py
+     * @param string $type
+     * @return string
+     */
+    private function mapType($type)
+    {
+        // this allows use of non-core types
+        if (class_exists($type)) return $type;
+
+        switch ($type) {
+            case 'base': return \Symfony\Component\Form\Extension\Core\Type\BaseType::class;
+            case 'birthday': return \Symfony\Component\Form\Extension\Core\Type\BirthdayType::class;
+            case 'button': return \Symfony\Component\Form\Extension\Core\Type\ButtonType::class;
+            case 'checkbox': return \Symfony\Component\Form\Extension\Core\Type\CheckboxType::class;
+            case 'choice': return \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class;
+            case 'collection': return \Symfony\Component\Form\Extension\Core\Type\CollectionType::class;
+            case 'country': return \Symfony\Component\Form\Extension\Core\Type\CountryType::class;
+            case 'currency': return \Symfony\Component\Form\Extension\Core\Type\CurrencyType::class;
+            case 'date': return \Symfony\Component\Form\Extension\Core\Type\DateType::class;
+            case 'datetime': return \Symfony\Component\Form\Extension\Core\Type\DateTimeType::class;
+            case 'email': return \Symfony\Component\Form\Extension\Core\Type\EmailType::class;
+            case 'file': return \Symfony\Component\Form\Extension\Core\Type\FileType::class;
+            case 'form': return \Symfony\Component\Form\Extension\Core\Type\FormType::class;
+            case 'hidden': return \Symfony\Component\Form\Extension\Core\Type\HiddenType::class;
+            case 'integer': return \Symfony\Component\Form\Extension\Core\Type\IntegerType::class;
+            case 'language': return \Symfony\Component\Form\Extension\Core\Type\LanguageType::class;
+            case 'locale': return \Symfony\Component\Form\Extension\Core\Type\LocaleType::class;
+            case 'money': return \Symfony\Component\Form\Extension\Core\Type\MoneyType::class;
+            case 'number': return \Symfony\Component\Form\Extension\Core\Type\NumberType::class;
+            case 'password': return \Symfony\Component\Form\Extension\Core\Type\PasswordType::class;
+            case 'percent': return \Symfony\Component\Form\Extension\Core\Type\PercentType::class;
+            case 'radio': return \Symfony\Component\Form\Extension\Core\Type\RadioType::class;
+            case 'range': return \Symfony\Component\Form\Extension\Core\Type\RangeType::class;
+            case 'repeated': return \Symfony\Component\Form\Extension\Core\Type\RepeatedType::class;
+            case 'reset': return \Symfony\Component\Form\Extension\Core\Type\ResetType::class;
+            case 'search': return \Symfony\Component\Form\Extension\Core\Type\SearchType::class;
+            case 'submit': return \Symfony\Component\Form\Extension\Core\Type\SubmitType::class;
+            case 'text': return \Symfony\Component\Form\Extension\Core\Type\TextType::class;
+            case 'textarea': return \Symfony\Component\Form\Extension\Core\Type\TextareaType::class;
+            case 'time': return \Symfony\Component\Form\Extension\Core\Type\TimeType::class;
+            case 'timezone': return \Symfony\Component\Form\Extension\Core\Type\TimezoneType::class;
+            case 'url': return \Symfony\Component\Form\Extension\Core\Type\UrlType::class;
+        }
+
+        throw new UnknownTypeException($type);
+    }
+
 }
