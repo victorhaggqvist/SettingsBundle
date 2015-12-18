@@ -47,7 +47,7 @@ class SettingsController extends Controller
      */
     public function manageOwnAction(Request $request)
     {
-        if (!$this->get('security.context')->getToken()) {
+        if (!$this->get('security.token_storage')->getToken()) {
             throw new AccessDeniedException($this->get('translator')->trans(
                 'must_be_logged_in_to_edit_own_settings',
                 array(),
@@ -64,7 +64,7 @@ class SettingsController extends Controller
             ));
         }
 
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
 
         if (!($user instanceof SettingsOwnerInterface)) {
             //For this to work the User entity must implement SettingsOwnerInterface
