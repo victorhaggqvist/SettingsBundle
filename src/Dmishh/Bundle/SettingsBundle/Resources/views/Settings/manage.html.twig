@@ -3,9 +3,11 @@
 {% block settings_form %}
     <h1>{% trans from 'settings' %}settings{% endtrans %}</h1>
 
-    <form method="post" id="settings-form" {{ form_enctype(settings_form) }}>
-        {{ form_widget(settings_form) }}
+    {{ form_start(settings_form, {'attr': {'id': 'settings-form'}}) }}
 
-        <input type="submit" value="{% trans from 'settings' %}save{% endtrans %}" />
-    </form>
+    {{ form_rest(settings_form) }}
+    <button type="submit">{% trans from 'settings' %}save{% endtrans %}</button>
+
+    {{ form_end(settings_form) }}
+
 {% endblock %}
